@@ -1,4 +1,108 @@
 package org.example.ClasesDAO;
 
-public class OlivarDAO {
+import org.apache.kafka.common.protocol.types.Field;
+import org.example.conexion.Conexion;
+import org.example.models.Cuadrilla;
+import org.example.models.Olivar;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class OlivarDAO implements org.example.dao.OlivarDAO {
+    Connection c;
+
+    public OlivarDAO() {
+        this.c = Conexion.getConnection();
+    }
+
+    @Override
+    public void add(Olivar ol) {
+        String sql="insert into Olivar (ubicacion,hectareas,produccionAnual) values(?,?,?) ";
+        try (PreparedStatement st = c.prepareStatement(sql)){
+
+            st.setString(1,ol.getUbicacion());
+            st.setDouble(2,ol.getHectareas());
+            st.setDouble(3,ol.getProduccionAnual());
+
+            st.executeQuery();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void update(Olivar ol) {
+        String sql = "update Olivar set ubicacion=?,hectareas=?,produccionAnual=? where id=?";
+
+        try(PreparedStatement st = c.prepareStatement(sql)) {
+
+            st.setString(1,ol.getUbicacion());
+            st.setDouble(2,ol.getHectareas());
+            st.setDouble(3,ol.getProduccionAnual());
+            st.setInt(4,ol.getId());
+
+            st.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        String sql="delete from Olivar where id=?";
+
+        try (PreparedStatement st = c.prepareStatement(sql)){
+
+            st.setInt(1,id);
+
+            st.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Olivar> read() {
+        List<Olivar> lista = new ArrayList<>();
+        String sql ="select * from Olivar";
+
+            try(Statement st = c.createStatement()){
+
+                ResultSet rs =st.executeQuery(sql);
+
+                while (rs.next()){
+                    Olivar ol = new Olivar(
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getDouble(3),
+                            rs.getDouble(4)
+                    );
+                    lista.add(ol);
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        return lista;
+    }
+
+    @Override
+    public void asociarCuadOl(int id_Cuad, int id_Ol) {
+        String sql="insert into Cuadrilla_Olivar (cuadrilla_id,olivar_id) values (?,?)";
+
+        try (PreparedStatement st = c.prepareStatement(sql)){
+            st.setInt(1,id_Cuad);
+            st.setInt(2,id_Ol);
+
+            st.executeQuery();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
