@@ -1,6 +1,6 @@
 package org.example.ClasesDAO;
 
-import org.apache.kafka.common.protocol.types.Field;
+
 import org.example.conexion.Conexion;
 import org.example.models.Almazara;
 
@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlmazaraDAO implements org.example.dao.AlmazaraDAO{
+public class AlmazaraDAO implements org.example.dao.AlmazaraDAO {
     Connection c;
 
     public AlmazaraDAO() {
@@ -22,9 +22,9 @@ public class AlmazaraDAO implements org.example.dao.AlmazaraDAO{
 
             st.setString(1,al.getNombre());
             st.setString(2,al.getUbicacion());
-            st.setDouble(1,al.getCapacidad());
+            st.setDouble(3,al.getCapacidad());
 
-            st.executeQuery();
+            st.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -79,6 +79,7 @@ public class AlmazaraDAO implements org.example.dao.AlmazaraDAO{
         }
 
     }
+
 
     @Override
     public void delete(int id) {

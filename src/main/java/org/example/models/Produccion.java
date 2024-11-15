@@ -9,6 +9,18 @@ public class Produccion {
     private String fecha;
     private double cantidadRecolectada;
 
+    @Override
+    public String toString() {
+        return "Produccion{" +
+                "id=" + id +
+                ", cuadrilla_id=" + cuadrilla_id +
+                ", olivar_id=" + olivar_id +
+                ", almazara_id=" + almazara_id +
+                ", fecha='" + fecha + '\'' +
+                ", cantidadRecolectada=" + cantidadRecolectada +
+                '}';
+    }
+
     public Produccion(int cuadrilla_id, int olivar_id, int almazara_id, String fecha, double cantidadRecolectada) {
         this.cuadrilla_id = cuadrilla_id;
         this.olivar_id = olivar_id;

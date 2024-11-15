@@ -26,7 +26,7 @@ public class TrabajadorDAO implements org.example.dao.TrabajadorDAO {
             st.setString(3,t.getPuesto());
             st.setDouble(4,t.getSalario());
 
-            st.executeQuery();
+            st.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -74,7 +74,7 @@ public class TrabajadorDAO implements org.example.dao.TrabajadorDAO {
         String sql ="select * from Trabajador";
 
         try(Statement st = c.createStatement()){
-
+            CuadrillaDAO cuadrillaDAO = new CuadrillaDAO();
             ResultSet rs =st.executeQuery(sql);
 
             while (rs.next()){
@@ -83,7 +83,8 @@ public class TrabajadorDAO implements org.example.dao.TrabajadorDAO {
                         rs.getString(2),
                         rs.getInt(3),
                         rs.getString(4),
-                        rs.getDouble(5)
+                        rs.getDouble(5),
+                        cuadrillaDAO.getCuadrillasByTrabajadorId(rs.getInt(1))
                 );
                 lista.add(t);
             }
@@ -103,10 +104,45 @@ public class TrabajadorDAO implements org.example.dao.TrabajadorDAO {
             st.setInt(1,id_Cuad);
             st.setInt(2,id_Trab);
 
-            st.executeQuery();
+            st.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Trabajador> getTrabajadorByCuadId(int id) {
+        List<Trabajador> lista = new ArrayList<>();
+        String sql ="select t.* from Cuadrilla cuad,Trabajador t, Cuadrilla_Trabajador cuadt where cuadt.cuadrilla_id=cuad.id and cuadt.trabajador_id=t.id and cuad.id=?";
+
+        String sql2="select t.* from Cuadrilla cuad,Trabajador t, Cuadrilla_Trabajador cuadt where cuadt.cuadrilla_id=cuad.id and cuadt.trabajador_id=t.id and cuad.id=?";
+
+        String sql3="select t.* from Cuadrilla cuad,Trabajador t, Cuadrilla_Trabajador cuadt where cuadt.cuadrilla_id=cuad.id and cuadt.trabajador_id=t.id and cuad.id=?";
+
+        try(PreparedStatement st = c.prepareStatement(sql3)){
+
+            CuadrillaDAO cuadrillaDAO = new CuadrillaDAO();
+
+            st.setInt(1,id);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()){
+                Trabajador t = new Trabajador(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getInt(3),
+                        rs.getString(4),
+                        rs.getDouble(5),
+                        cuadrillaDAO.getCuadrillasByTrabajadorId(rs.getInt(1))
+                );
+                lista.add(t);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  lista;
     }
 }

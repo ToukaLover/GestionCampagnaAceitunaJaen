@@ -1,6 +1,5 @@
 package org.example.models;
 
-import org.apache.kafka.common.protocol.types.Field;
 
 import java.util.List;
 
@@ -12,11 +11,30 @@ public class Olivar {
     private double produccionAnual;
     private List<Cuadrilla> cuadrillaList;
 
+    @Override
+    public String toString() {
+        return "Olivar{" +
+                "id=" + id +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", hectareas=" + hectareas +
+                ", produccionAnual=" + produccionAnual +
+                ", cuadrillaList=" + cuadrillaList +
+                '}';
+    }
+
     public Olivar(int id, String ubicacion, double hectareas, double produccionAnual) {
         this.id = id;
         this.ubicacion = ubicacion;
         this.hectareas = hectareas;
         this.produccionAnual = produccionAnual;
+    }
+
+    public Olivar(int id, String ubicacion, double hectareas, double produccionAnual, List<Cuadrilla> cuadrillaList) {
+        this.id = id;
+        this.ubicacion = ubicacion;
+        this.hectareas = hectareas;
+        this.produccionAnual = produccionAnual;
+        this.cuadrillaList = cuadrillaList;
     }
 
     public Olivar(String ubicacion, double hectareas, double produccionAnual) {

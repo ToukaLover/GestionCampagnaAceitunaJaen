@@ -11,4 +11,5 @@ public interface TrabajadorDAO {
     public void delete(int id);
     public List<Trabajador> read();
     public void asociarCuadTrab(int id_Cuad,int id_Trab);
+    List<Trabajador> getTrabajadorByCuadId(int id);
 }

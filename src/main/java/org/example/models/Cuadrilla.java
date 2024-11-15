@@ -10,10 +10,27 @@ public class Cuadrilla {
     private List<Trabajador> trabajadorList;
     private List<Olivar> olivarList;
 
+    @Override
+    public String toString() {
+        return "Cuadrilla{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", supervisorId=" + supervisorId +
+                '}';
+    }
+
     public Cuadrilla(int id, String nombre, int supervisorId) {
         this.id = id;
         this.nombre = nombre;
         this.supervisorId = supervisorId;
+    }
+
+    public Cuadrilla(int id, String nombre, int supervisorId, List<Trabajador> trabajadorList, List<Olivar> olivarList) {
+        this.id = id;
+        this.nombre = nombre;
+        this.supervisorId = supervisorId;
+        this.trabajadorList = trabajadorList;
+        this.olivarList = olivarList;
     }
 
     public Cuadrilla(String nombre, int supervisorId) {

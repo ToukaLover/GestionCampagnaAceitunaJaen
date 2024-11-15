@@ -13,7 +13,7 @@ public interface CuadrillaDAO {
     List<Cuadrilla> getCuadrillasByTrabajadorId(int id);
     void update(Cuadrilla cuad);
     void delete(int id);
-
+    List<Cuadrilla> getCuadrillasBySupervisorId(int id);
 
 
 }

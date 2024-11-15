@@ -1,6 +1,5 @@
 package org.example.ClasesDAO;
 
-import org.apache.kafka.common.protocol.types.Field;
 import org.example.conexion.Conexion;
 import org.example.models.Cuadrilla;
 import org.example.models.Olivar;
@@ -25,7 +24,7 @@ public class OlivarDAO implements org.example.dao.OlivarDAO {
             st.setDouble(2,ol.getHectareas());
             st.setDouble(3,ol.getProduccionAnual());
 
-            st.executeQuery();
+            st.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -71,7 +70,7 @@ public class OlivarDAO implements org.example.dao.OlivarDAO {
         String sql ="select * from Olivar";
 
             try(Statement st = c.createStatement()){
-
+                CuadrillaDAO cuadrillaDAO = new CuadrillaDAO();
                 ResultSet rs =st.executeQuery(sql);
 
                 while (rs.next()){
@@ -79,7 +78,8 @@ public class OlivarDAO implements org.example.dao.OlivarDAO {
                             rs.getInt(1),
                             rs.getString(2),
                             rs.getDouble(3),
-                            rs.getDouble(4)
+                            rs.getDouble(4),
+                            cuadrillaDAO.getCuadrillasByOlivarId(rs.getInt(1))
                     );
                     lista.add(ol);
                 }
@@ -98,11 +98,40 @@ public class OlivarDAO implements org.example.dao.OlivarDAO {
             st.setInt(1,id_Cuad);
             st.setInt(2,id_Ol);
 
-            st.executeQuery();
+            st.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+
+
+    @Override
+    public List<Olivar> getOlivarByCuadId(int id) {
+        List<Olivar> lista = new ArrayList<>();
+        String sql="select ol.* from Cuadrilla cuad,Olivar ol, Cuadrilla_Olivar cuadol where cuadol.cuadrilla_id=cuad.id and cuadol.olivar_id=ol.id and cuad.id=?";
+        try(PreparedStatement st = c.prepareStatement(sql)){
+            CuadrillaDAO cuadrillaDAO = new CuadrillaDAO();
+            st.setInt(1,id);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()){
+                Olivar ol = new Olivar(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getDouble(4),
+                        cuadrillaDAO.getCuadrillasByOlivarId(rs.getInt(1))
+                );
+                lista.add(ol);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  lista;
     }
 }

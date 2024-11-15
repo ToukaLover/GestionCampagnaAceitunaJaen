@@ -11,4 +11,6 @@ public interface OlivarDAO {
     public void delete(int id);
     public List<Olivar> read();
     public void asociarCuadOl(int id_Cuad,int id_Ol);
+    List<Olivar> getOlivarByCuadId(int id);
+
 }

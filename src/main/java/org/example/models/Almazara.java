@@ -13,6 +13,16 @@ public class Almazara {
     private String ubicacion;
     private double capacidad;
 
+    @Override
+    public String toString() {
+        return "Almazara{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", capacidad=" + capacidad +
+                '}';
+    }
+
     public Almazara(int id, String nombre, String ubicacion, double capacidad) {
         this.id = id;
         this.nombre = nombre;

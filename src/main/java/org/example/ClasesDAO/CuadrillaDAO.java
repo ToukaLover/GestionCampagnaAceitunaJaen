@@ -2,6 +2,7 @@ package org.example.ClasesDAO;
 
 import org.example.conexion.Conexion;
 import org.example.models.Cuadrilla;
+import org.example.models.Olivar;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,19 +13,19 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
     Connection c;
 
     public CuadrillaDAO() {
-        this.c  = Conexion.getConnection();;
+        this.c  = Conexion.getConnection();
     }
 
     @Override
     public void add(Cuadrilla cuad) {
-        String sql="insert into Cuadrilla (nombe,supervisor_id) values(?,?)";
+        String sql="insert into Cuadrilla (nombre,supervisor_id) values(?,?)";
 
         try(PreparedStatement st = c.prepareStatement(sql)) {
 
             st.setString(1, cuad.getNombre());
             st.setInt(2,cuad.getSupervisorId());
 
-            st.executeQuery();
+            st.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -36,7 +37,8 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
         List<Cuadrilla> lista= new ArrayList<>();
         String sql="select * from Cuadrilla";
         try(Statement st = c.createStatement()){
-
+            TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
+            OlivarDAO olivarDAO = new OlivarDAO();
             ResultSet rs = st.executeQuery(sql);
 
             while (rs.next()){
@@ -44,7 +46,9 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
                 Cuadrilla cuad = new Cuadrilla(
                         rs.getInt(1),
                         rs.getString(2),
-                        rs.getInt(3)
+                        rs.getInt(3)/*,
+                        trabajadorDAO.getTrabajadorByCuadId(rs.getInt(1)),
+                        olivarDAO.getOlivarByCuadId(rs.getInt(1))*/
                 );
                 lista.add(cuad);
             }
@@ -59,9 +63,10 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
     @Override
     public List<Cuadrilla> getCuadrillasByOlivarId(int id) {
         List<Cuadrilla> lista = new ArrayList<>();
-        String sql="select cuad.* from Cuadrilla cuad,Olivar ol, Cuadrilla_Olivar cuadol where cuadol.cuadrilla_id=cuad.id and cuadol.olivar_id=ol.id where ol.id=?";
+        String sql="select cuad.* from Cuadrilla cuad,Olivar ol, Cuadrilla_Olivar cuadol where cuadol.cuadrilla_id=cuad.id and cuadol.olivar_id=ol.id and ol.id=?";
             try(PreparedStatement st = c.prepareStatement(sql)){
-
+                TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
+                OlivarDAO olivarDAO = new OlivarDAO();
                 st.setInt(1,id);
 
                 ResultSet rs = st.executeQuery();
@@ -70,7 +75,9 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
                     Cuadrilla cuad = new Cuadrilla(
                             rs.getInt(1),
                             rs.getString(2),
-                            rs.getInt(3)
+                            rs.getInt(3)/*,
+                            trabajadorDAO.getTrabajadorByCuadId(rs.getInt(1)),
+                            olivarDAO.getOlivarByCuadId(rs.getInt(1))*/
                     );
                     lista.add(cuad);
                 }
@@ -84,7 +91,11 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
     @Override
     public List<Cuadrilla> getCuadrillasByTrabajadorId(int id) {
         List<Cuadrilla> lista = new ArrayList<>();
-        String sql="select cuad.* from Cuadrilla cuad,Trabajador t, Cuadrilla_Trabajador cuadt where cuadt.cuadrilla_id=cuad.id and cuadt.olivar_id=t.id where t.id=?";
+        String sql="select cuad.* from Cuadrilla cuad,Trabajador t, Cuadrilla_Trabajador cuadt where cuadt.cuadrilla_id=cuad.id and cuadt.trabajador_id=t.id and t.id=?";
+
+        TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
+        OlivarDAO olivarDAO = new OlivarDAO();
+
         try(PreparedStatement st = c.prepareStatement(sql)){
 
             st.setInt(1,id);
@@ -96,6 +107,8 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
                         rs.getInt(1),
                         rs.getString(2),
                         rs.getInt(3)
+                        /*trabajadorDAO.getTrabajadorByCuadId(rs.getInt(1)),
+                        olivarDAO.getOlivarByCuadId(rs.getInt(1))*/
                 );
                 lista.add(cuad);
             }
@@ -137,5 +150,34 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Cuadrilla> getCuadrillasBySupervisorId(int id){
+        List<Cuadrilla> lista= new ArrayList<>();
+        String sql="select * from Cuadrilla where supervisor_id=?";
+        try(PreparedStatement st = c.prepareStatement(sql)){
+            TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
+            OlivarDAO olivarDAO = new OlivarDAO();
+            st.setInt(1,id);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()){
+
+                Cuadrilla cuad = new Cuadrilla(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getInt(3)/*,
+                        trabajadorDAO.getTrabajadorByCuadId(rs.getInt(1)),
+                        olivarDAO.getOlivarByCuadId(rs.getInt(1))*/
+                );
+                lista.add(cuad);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return  lista;
     }
 }
