@@ -19,7 +19,7 @@ public class ProduccionDAO implements org.example.dao.ProduccionDAO {
     Connection c = Conexion.getConnection();
     DateTimeFormatter t = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-
+    //Metodo para meter un dato a la base de datos
     @Override
     public void add(Produccion p) {
         String sql = "insert into Produccion(cuadrilla_id,olivar_id,almazara_id,fecha,cantidadRecolectada) values(?,?,?,?,?)";
@@ -38,7 +38,7 @@ public class ProduccionDAO implements org.example.dao.ProduccionDAO {
             throw new RuntimeException(e);
         }
     }
-
+    //Metodo para actualizar una dato
     @Override
     public void update(Produccion p) {
         String sql="update Produccion cuadrilla_id=?,olivar_id=?,almazada_id=?,fecha=?,cantidadRecolectada=? where id=?";
@@ -56,7 +56,7 @@ public class ProduccionDAO implements org.example.dao.ProduccionDAO {
             throw new RuntimeException(e);
         }
     }
-
+    //Metodo para borrar un dato
     @Override
     public void delete(int id) {
         String sql="delete Produccion where id=?";
@@ -71,7 +71,7 @@ public class ProduccionDAO implements org.example.dao.ProduccionDAO {
             throw new RuntimeException(e);
         }
     }
-
+    //Metodo para leer todos los de la base de datos
     @Override
     public List<Produccion> read() {
         List<Produccion> lista= new ArrayList<>();
@@ -99,6 +99,8 @@ public class ProduccionDAO implements org.example.dao.ProduccionDAO {
 
         return  lista;
     }
+
+    //Metodos especificos para hace el ejercicio
 
     public List<Olivar> PgetOlivarByCuadrillaId(int id){
         List<Olivar> lista = new ArrayList<>();

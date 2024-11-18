@@ -15,7 +15,7 @@ public class TrabajadorDAO implements org.example.dao.TrabajadorDAO {
     public TrabajadorDAO() {
         this.c = Conexion.getConnection();
     }
-
+    //Metodo para meter un dato a la base de datos
     @Override
     public void add(Trabajador t) {
         String sql="insert into Trabajador (nombre,edad,puesto,salario) values(?,?,?,?) ";
@@ -32,7 +32,7 @@ public class TrabajadorDAO implements org.example.dao.TrabajadorDAO {
             throw new RuntimeException(e);
         }
     }
-
+    //Metodo para actualizar una dato
     @Override
     public void update(Trabajador t) {
         String sql = "update Trabajador set nombe=?,edad=?,puesto=?,salario=? where id=?";
@@ -51,7 +51,7 @@ public class TrabajadorDAO implements org.example.dao.TrabajadorDAO {
             throw new RuntimeException(e);
         }
     }
-
+    //Metodo para borrar un dato
     @Override
     public void delete(int id) {
         String sql="delete from Trabajador where id=?";
@@ -66,7 +66,7 @@ public class TrabajadorDAO implements org.example.dao.TrabajadorDAO {
             throw new RuntimeException(e);
         }
     }
-
+    //Metodo para leer todos los de la base de datos
     @Override
     public List<Trabajador> read() {
         List<Trabajador> lista=new ArrayList<>();

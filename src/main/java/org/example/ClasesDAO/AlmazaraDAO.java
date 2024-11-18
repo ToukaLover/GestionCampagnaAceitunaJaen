@@ -15,6 +15,8 @@ public class AlmazaraDAO implements org.example.dao.AlmazaraDAO {
         this.c = Conexion.getConnection();;
     }
 
+
+    //Metodo para meter un dato a la base de datos
     @Override
     public void add(Almazara al) {
         String sql="insert into Almazara (nombre,ubicacion,capacidad) values(?,?,?) ";
@@ -31,7 +33,7 @@ public class AlmazaraDAO implements org.example.dao.AlmazaraDAO {
         }
 
     }
-
+    //Metodo para leer todos los de la base de datos
     @Override
     public List<Almazara> read() {
 
@@ -59,7 +61,7 @@ public class AlmazaraDAO implements org.example.dao.AlmazaraDAO {
 
         return lista;
     }
-
+    //Metodo para actualizar una dato
     @Override
     public void update(Almazara al) {
 
@@ -79,8 +81,7 @@ public class AlmazaraDAO implements org.example.dao.AlmazaraDAO {
         }
 
     }
-
-
+    //Metodo para borrar un dato
     @Override
     public void delete(int id) {
 

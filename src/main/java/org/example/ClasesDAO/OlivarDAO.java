@@ -14,7 +14,7 @@ public class OlivarDAO implements org.example.dao.OlivarDAO {
     public OlivarDAO() {
         this.c = Conexion.getConnection();
     }
-
+    //Metodo para meter un dato a la base de datos
     @Override
     public void add(Olivar ol) {
         String sql="insert into Olivar (ubicacion,hectareas,produccionAnual) values(?,?,?) ";
@@ -30,7 +30,7 @@ public class OlivarDAO implements org.example.dao.OlivarDAO {
             throw new RuntimeException(e);
         }
     }
-
+    //Metodo para actualizar una dato
     @Override
     public void update(Olivar ol) {
         String sql = "update Olivar set ubicacion=?,hectareas=?,produccionAnual=? where id=?";
@@ -48,7 +48,7 @@ public class OlivarDAO implements org.example.dao.OlivarDAO {
             throw new RuntimeException(e);
         }
     }
-
+    //Metodo para borrar un dato
     @Override
     public void delete(int id) {
         String sql="delete from Olivar where id=?";
@@ -63,7 +63,7 @@ public class OlivarDAO implements org.example.dao.OlivarDAO {
             throw new RuntimeException(e);
         }
     }
-
+    //Metodo para leer todos los de la base de datos
     @Override
     public List<Olivar> read() {
         List<Olivar> lista = new ArrayList<>();

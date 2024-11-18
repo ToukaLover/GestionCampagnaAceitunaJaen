@@ -15,7 +15,7 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
     public CuadrillaDAO() {
         this.c  = Conexion.getConnection();
     }
-
+    //Metodo para meter un dato a la base de datos
     @Override
     public void add(Cuadrilla cuad) {
         String sql="insert into Cuadrilla (nombre,supervisor_id) values(?,?)";
@@ -31,7 +31,7 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
             throw new RuntimeException(e);
         }
     }
-
+    //Metodo para leer todos los de la base de datos
     @Override
     public List<Cuadrilla> read() {
         List<Cuadrilla> lista= new ArrayList<>();
@@ -118,7 +118,7 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
         }
         return  lista;
     }
-
+    //Metodo para actualizar una dato
     @Override
     public void update(Cuadrilla cuad) {
 
@@ -135,7 +135,7 @@ public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
         }
 
     }
-
+    //Metodo para borrar un dato
     @Override
     public void delete(int id) {
 
