@@ -59,7 +59,7 @@ public class ProduccionDAO implements org.example.dao.ProduccionDAO {
     //Metodo para borrar un dato
     @Override
     public void delete(int id) {
-        String sql="delete Produccion where id=?";
+        String sql="delete from Produccion where id=?";
 
         try(PreparedStatement st = c.prepareStatement(sql)){
 

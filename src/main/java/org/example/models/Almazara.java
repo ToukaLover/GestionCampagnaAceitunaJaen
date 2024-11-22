@@ -3,15 +3,23 @@ package org.example.models;
 import org.example.conexion.Conexion;
 import org.example.dao.AlmazaraDAO;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Connection;
 import java.util.List;
-
+@XmlRootElement (name = "Almazara")
 public class Almazara {
-
+    @XmlElement(name = "id")
     private int id;
+    @XmlElement(name = "nombre")
     private String nombre;
+    @XmlElement(name = "ubicacion")
     private String ubicacion;
+    @XmlElement(name = "capaciad")
     private double capacidad;
+
+    public Almazara() {
+    }
 
     @Override
     public String toString() {

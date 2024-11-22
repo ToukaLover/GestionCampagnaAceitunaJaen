@@ -1,11 +1,17 @@
 package org.example;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import org.example.ClasesDAO.*;
+import org.example.Contenedores.*;
 import org.example.conexion.Conexion;
 import org.example.models.*;
+import org.fusesource.hawtbuf.BufferEditor;
 
 import javax.swing.*;
-import java.sql.Connection;
+import javax.xml.bind.*;
+import java.io.*;
 import java.util.List;
 import java.util.PropertyPermission;
 import java.util.Scanner;
@@ -13,12 +19,27 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
+        Conexion.hacerTrigger();
 
         AlmazaraDAO almazaraDAO = new AlmazaraDAO();
         OlivarDAO olivarDAO = new OlivarDAO();
         TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
         CuadrillaDAO cuadrillaDAO = new CuadrillaDAO();
         ProduccionDAO produccionDAO= new ProduccionDAO();
+
+        Almazaras almazaras = new Almazaras(almazaraDAO.read());
+        Cuadrillas cuadrillas = new Cuadrillas(cuadrillaDAO.read());
+        Olivares olivares = new Olivares(olivarDAO.read());
+        Producciones producciones = new Producciones(produccionDAO.read());
+        Trabajadores trabajadores = new Trabajadores(trabajadorDAO.read());
+
+        BaseDeDatos baseDeDatos = new BaseDeDatos(almazaras,cuadrillas,olivares,producciones,trabajadores);
+
+        Produccion p = new Produccion(1,5,6,"2024-12-12",20);
+        Produccion p1 = new Produccion(1,5,6,"2024-12-12",-20);
+//        produccionDAO.add(p);
+
+
 
         /*
 
@@ -136,6 +157,10 @@ public class Main {
             System.out.println("7. Mostrar la producción hasta una determinada fecha, de una determinada almazara.");
             System.out.println("8. Mostrar la producción hasta una determinada fecha, de un determinado olivar.");
             System.out.println("9. Mostrar la producción hasta una determinada fecha, de una cuadrilla determinada.");
+            System.out.println("10. Hacer XML de toda la Base De Datos.");
+            System.out.println("11. Hacer JSON de toda la Base De Datos.");
+            System.out.println("12. Leer XML.");
+            System.out.println("13. Leer JSON.");
             System.out.println("0. Salir.");
 
             System.out.print("Seleccione una opción: ");
@@ -214,7 +239,89 @@ public class Main {
                     c=sc.nextInt();
                     System.out.println(produccionDAO.getProduccionByFechaCuad(fecha3,c));
                     break;
+                case 10:
+                    hacerXMLbaseDeDatos(baseDeDatos);
+                    break;
+                case 11:
+                    hacerJSON(baseDeDatos);
+                    break;
+                case 12:
+                    leerXMLbaseDeDatos();
+                    break;
+                case 13:
+                    leerJSON();
+                    break;
+                /*case 10:
+                    try{
 
+                        JAXBContext jaxbContext = JAXBContext.newInstance(Almazaras.class);
+                        Marshaller marshaller = jaxbContext.createMarshaller();
+                        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+                        marshaller.marshal(almazaras,new File("Archivos/XML/Almazaras.xml"));
+
+                        System.out.println("XML de Almazaras Hecho");
+
+                    } catch (JAXBException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                case 11:
+                    try{
+                        JAXBContext jaxbContext = JAXBContext.newInstance(Cuadrillas.class);
+                        Marshaller marshaller = jaxbContext.createMarshaller();
+                        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+                        marshaller.marshal(cuadrillas,new File("Archivos/XML/Cuadrillas.xml"));
+
+                        System.out.println("XML de Cuadrillas Hecho");
+
+                    } catch (JAXBException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                case 12:
+                    try{
+                        JAXBContext jaxbContext = JAXBContext.newInstance(Olivares.class);
+                        Marshaller marshaller = jaxbContext.createMarshaller();
+                        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+                        marshaller.marshal(olivares,new File("Archivos/XML/Olivares.xml"));
+
+                        System.out.println("XML de Olivares Hecho");
+
+                    } catch (JAXBException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                case 13:
+                    try{
+                        JAXBContext jaxbContext = JAXBContext.newInstance(Producciones.class);
+                        Marshaller marshaller = jaxbContext.createMarshaller();
+                        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+                        marshaller.marshal(producciones,new File("Archivos/XML/Producciones.xml"));
+
+                        System.out.println("XML de Producciones Hecho");
+
+                    } catch (JAXBException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                case 14:
+                    try{
+                        JAXBContext jaxbContext = JAXBContext.newInstance(Trabajadores.class);
+                        Marshaller marshaller = jaxbContext.createMarshaller();
+                        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+                        marshaller.marshal(trabajadores,new File("Archivos/XML/Trabajadores.xml"));
+
+                        System.out.println("XML de Trabajadores Hecho");
+
+                    } catch (JAXBException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;*/
                 case 0:
                     System.out.println("Saliendo del programa...");
                     break;
@@ -223,6 +330,67 @@ public class Main {
             }
 
         } while (opcion != 0);
+
+    }
+
+    private static void hacerJSON(BaseDeDatos baseDeDatos) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        String json = gson.toJson(baseDeDatos);
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("Archivos/JSON/BaseDeDatos.json"))){
+
+            bw.write(json);
+
+            System.out.println("JSON hecho");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void hacerXMLbaseDeDatos(BaseDeDatos baseDeDatos){
+        try{
+            JAXBContext jaxbContext = JAXBContext.newInstance(BaseDeDatos.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            marshaller.marshal(baseDeDatos,new File("Archivos/XML/BaseDeDatos.xml"));
+
+            System.out.println("XML de la Base De Datos Hecho");
+
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void leerXMLbaseDeDatos(){
+        try{
+            JAXBContext jaxbContext = JAXBContext.newInstance(BaseDeDatos.class);
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+            BaseDeDatos baseDeDatos1 = (BaseDeDatos) unmarshaller.unmarshal(new File("Archivos/XML/BaseDeDatos.xml"));
+
+            System.out.println("Xml leido");
+
+            System.out.println(baseDeDatos1.toString());
+
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void leerJSON() {
+        File f = new File("Archivos/JSON/BaseDeDatos.json");
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        try {
+            BaseDeDatos baseDeDatos = gson.fromJson(new FileReader(f),BaseDeDatos.class);
+
+            System.out.println(baseDeDatos.toString());
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }

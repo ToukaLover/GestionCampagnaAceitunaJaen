@@ -1,15 +1,21 @@
 package org.example.models;
 
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
-
+@XmlRootElement(name = "Olivar")
 public class Olivar {
-
+    @XmlElement(name = "id")
     private int id;
+    @XmlElement(name = "ubicacion")
     private String ubicacion;
+    @XmlElement(name = "hectareas")
     private double hectareas;
+    @XmlElement(name = "produccionAnual")
     private double produccionAnual;
-    private List<Cuadrilla> cuadrillaList;
+    private transient List<Cuadrilla> cuadrillaList;
 
     @Override
     public String toString() {
@@ -20,6 +26,9 @@ public class Olivar {
                 ", produccionAnual=" + produccionAnual +
                 ", cuadrillaList=" + cuadrillaList +
                 '}';
+    }
+
+    public Olivar() {
     }
 
     public Olivar(int id, String ubicacion, double hectareas, double produccionAnual) {

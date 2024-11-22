@@ -1,14 +1,22 @@
 package org.example.models;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
-
+@XmlRootElement(name = "Cuadrilla")
 public class Cuadrilla {
-
+    @XmlElement(name = "id")
     private int id;
+    @XmlElement(name = "nombre")
     private String nombre;
+    @XmlElement(name = "supervisorId")
     private int supervisorId;
-    private List<Trabajador> trabajadorList;
-    private List<Olivar> olivarList;
+    private transient List<Trabajador> trabajadorList;
+    private transient List<Olivar> olivarList;
+
+    public Cuadrilla() {
+    }
 
     @Override
     public String toString() {
@@ -36,14 +44,6 @@ public class Cuadrilla {
     public Cuadrilla(String nombre, int supervisorId) {
         this.nombre = nombre;
         this.supervisorId = supervisorId;
-    }
-
-    public void setTrabajadorList(List<Trabajador> trabajadorList) {
-        this.trabajadorList = trabajadorList;
-    }
-
-    public void setOlivarList(List<Olivar> olivarList) {
-        this.olivarList = olivarList;
     }
 
     public int getId() {

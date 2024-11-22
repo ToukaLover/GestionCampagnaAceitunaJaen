@@ -12,14 +12,14 @@ public class AlmazaraDAO implements org.example.dao.AlmazaraDAO {
     Connection c;
 
     public AlmazaraDAO() {
-        this.c = Conexion.getConnection();;
+        this.c = Conexion.getConnection();
     }
 
 
     //Metodo para meter un dato a la base de datos
     @Override
     public void add(Almazara al) {
-        String sql="insert into Almazara (nombre,ubicacion,capacidad) values(?,?,?) ";
+        String sql="insert into Almazara (nombre,ubicacion,capacidad) values(?,?,?)";
         try (PreparedStatement st = c.prepareStatement(sql)){
 
             st.setString(1,al.getNombre());
@@ -42,10 +42,9 @@ public class AlmazaraDAO implements org.example.dao.AlmazaraDAO {
         String sql="select * from Almazara";
         try (Statement st = c.createStatement()){
 
-            ResultSet rs =st.executeQuery(sql);
+            ResultSet rs = st.executeQuery(sql);
 
-            while (rs.next()){
-
+            while(rs.next()){
                 Almazara al = new Almazara(
                         rs.getInt(1),
                         rs.getString(2),
